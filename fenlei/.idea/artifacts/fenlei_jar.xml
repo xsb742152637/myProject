@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact name="fenlei:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/fenlei_jar</output-path>
+    <root id="root">
+      <element id="archive" name="fenlei.jar">
+        <element id="module-output" name="fenlei" />
+      </element>
+      <element id="directory" name="lib">
+        <element id="file-copy" path="$PROJECT_DIR$/lib/dom4j-1.6.1.jar" />
+      </element>
+    </root>
+  </artifact>
+</component>

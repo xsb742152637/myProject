@@ -11,7 +11,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 
 public class Main extends JFrame {
-    public static JTextArea ja=new JTextArea(15,41);
+    public static JTextArea ja=new JTextArea(14,41);
     public static JScrollPane jscrollPane= new JScrollPane(ja);;
     public static SimpleDateFormat sdf;
     public static Calendar cal = Calendar.getInstance();
