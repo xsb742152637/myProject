@@ -56,7 +56,10 @@ public class Main extends JFrame {
         File f = new File(begin);
         m.getFile(f.listFiles());
 
-        ja.setText(ja.getText()+"\n\n\n\n分类完成,创建文件夹："+m.c_wjjs+" 个,分类文件："+m.c_wjs+" 个.\n\n\n\n\n\n\n");
+        int height=5;
+        Point p = new Point();
+        p.setLocation(0,ja.getLineCount()*height);
+        ja.setText(ja.getText()+"\n\n分类完成,创建文件夹："+m.c_wjjs+" 个,分类文件："+m.c_wjs+" 个.\n\n\n\n\n\n\n");
 
     }
 
@@ -122,9 +125,9 @@ public class Main extends JFrame {
                         fo.write(buffer, 0, byteread);
                     }
                     ja.setText(ja.getText()+"\n复制文件到："+name);
-                    int height=20;
+                    int height=15;
                     Point p = new Point();
-                    p.setLocation(0,this.ja.getLineCount()*height);
+                    p.setLocation(0,ja.getLineCount()*height);
                     jscrollPane.getViewport().setViewPosition(p);
                     c_wjs++;
                 }
