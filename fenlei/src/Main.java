@@ -11,7 +11,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 
 public class Main extends JFrame {
-    public static JTextArea ja=new JTextArea(14,43);
+    public static JTextArea ja=new JTextArea(15,41);
+    public static JScrollPane jscrollPane= new JScrollPane(ja);;
     public static SimpleDateFormat sdf;
     public static Calendar cal = Calendar.getInstance();
     public static String begin;
@@ -25,7 +26,7 @@ public class Main extends JFrame {
         this.setLayout(new FlowLayout());
 
         ja.setLineWrap(true);
-        this.add(ja);
+        this.add(jscrollPane);
 
         this.setBackground(Color.BLACK);
         this.setSize(new Dimension(500, 300));
@@ -55,7 +56,7 @@ public class Main extends JFrame {
         File f = new File(begin);
         m.getFile(f.listFiles());
 
-        ja.setText(ja.getText()+"\n\n分类完成,创建文件夹："+m.c_wjjs+" 个,分类文件："+m.c_wjs+" 个.");
+        ja.setText(ja.getText()+"\n\n\n\n分类完成,创建文件夹："+m.c_wjjs+" 个,分类文件："+m.c_wjs+" 个.\n\n\n\n\n\n\n");
 
     }
 
@@ -65,8 +66,6 @@ public class Main extends JFrame {
         boolean re=false;
         ja.setText(ja.getText()+"\n\n开始解析xml配置文件");
         try {
-            //String url=getClass().getResource("public/pu.xml").toURI().toString();
-            //String url= Main.class.getClassLoader().getResource("public/pu.xml").getPath().toString().replace("file:/","");
             InputStream is=this.getClass().getResourceAsStream("/public/pu.xml");
             SAXReader sr = new SAXReader();
             Document doc  =  sr.read(is);
@@ -114,13 +113,19 @@ public class Main extends JFrame {
                     getFile(file.listFiles());
                 }else{
                     fi = new FileInputStream(file);
-                    fo = new FileOutputStream(new File(getName(file)+"/"+file.getName().toString()));
+                    String name=getName(file)+"/"+file.getName().toString();
+                    fo = new FileOutputStream(new File(name));
 
                     byte[] buffer = new byte[1444];
                     int byteread = 0;
                     while ( (byteread = fi.read(buffer)) != -1) {
                         fo.write(buffer, 0, byteread);
                     }
+                    ja.setText(ja.getText()+"\n复制文件到："+name);
+                    int height=20;
+                    Point p = new Point();
+                    p.setLocation(0,this.ja.getLineCount()*height);
+                    jscrollPane.getViewport().setViewPosition(p);
                     c_wjs++;
                 }
             }
@@ -162,11 +167,13 @@ public class Main extends JFrame {
         try {
             if(!fl.exists()){//判断文件夹是否存在
                 fl.mkdirs();
+                ja.setText(ja.getText()+"\n\n创建跟目录："+rootName);
                 c_wjjs++;
             }
             File fl2=new File(name);
             if(!fl2.exists()){//判断文件夹是否存在
                 fl2.mkdirs();
+                ja.setText(ja.getText()+"\n\n创建目录："+name+"\n");
                 c_wjjs++;
             }
         } catch (Exception e) {
