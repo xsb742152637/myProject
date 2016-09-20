@@ -16,7 +16,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 
 public class Main extends JFrame {
-    public static JTextArea ja=new JTextArea(13,42);
+    public static JTextArea ja=new JTextArea(12,42);
     public static JScrollPane jscrollPane= new JScrollPane(ja);//使文本域内容超出时显示滚动条
     public static SimpleDateFormat sdf;
     public static Calendar cal = Calendar.getInstance();
