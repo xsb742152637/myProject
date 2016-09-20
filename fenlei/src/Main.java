@@ -157,14 +157,17 @@ public class Main extends JFrame {
         }else if(selV.contains("年")){
             f_type="yyyy";
         }
-        begin_fl();
+        c_wjjs=0;
+        c_wjs=0;
+        begin_fl(selV);
     }
 
     //开始分类
-    public void begin_fl(){
-        setText_ja("\n\n当前时间："+cal.getTime().toLocaleString());
+    public void begin_fl(String type){
+        setText_ja("当前时间："+cal.getTime().toLocaleString());
 
-        setText_ja("\n\n开始对 “"+begin+"” 目录下的文件进行分类。请稍候！！！");
+        setText_ja("\n\n 从 “"+begin+"” 到 “"+rootName+"” , "+type+" ！");
+        setText_ja("\n开始对分类。请稍候！！！");
 
         sdf=new SimpleDateFormat(f_type);
 
@@ -172,7 +175,7 @@ public class Main extends JFrame {
         getFile(f.listFiles());
 
         if(c_wjs>0)
-            setText_ja("\n\n分类完成请到“"+rootName+"”目录下查看分类结果！\n创建文件夹："+c_wjjs+" 个,分类文件："+c_wjs+" 个！\n\n\n");
+            setText_ja("\n\n分类完成！请到“"+rootName+"”目录下查看分类结果！\n创建文件夹："+c_wjjs+" 个,分类文件："+c_wjs+" 个！\n\n\n");
 
     }
 
@@ -241,7 +244,7 @@ public class Main extends JFrame {
                     while ( (byteread = fi.read(buffer)) != -1) {
                         fo.write(buffer, 0, byteread);
                     }
-                    setText_ja("\n复制文件到："+name);
+                    setText_ja("\n复制成功："+name);
                     c_wjs++;
                 }
             }
@@ -251,8 +254,10 @@ public class Main extends JFrame {
         } finally {
             try {
                 if(fi!=null){
+                    fo.flush();
                     fi.close();
                 }if(fo!=null){
+                    fo.flush();
                     fo.close();
                 }
             } catch (IOException e) {
@@ -266,12 +271,12 @@ public class Main extends JFrame {
         String wjjm="";
         String f_name=f.getName().toString().toLowerCase();
 
-        if(f_name.contains("pic_")){
-            wjjm=f_name.replaceAll("pic_","").substring(0,8).toString();
-        }else{
+        //if(f_name.contains("pic_")){
+        //    wjjm=f_name.replaceAll("pic_","").substring(0,8).toString();
+        //}else{
             cal.setTimeInMillis(f.lastModified());//文件修改日期
             wjjm=sdf.format(cal.getTime()).toString();
-        }
+        //}
         wjjm=rootName+"/"+wjjm;
         boolean re=createFile(wjjm);
         return wjjm;
