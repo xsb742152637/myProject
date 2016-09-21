@@ -5,18 +5,22 @@ import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
 
-public class Main extends JFrame {
-    public static JTextArea ja=new JTextArea(12,42);
+public class Main {
+    public static JFrame jf=new JFrame();
+    public static JTextArea ja=new JTextArea();
     public static JScrollPane jscrollPane= new JScrollPane(ja);//使文本域内容超出时显示滚动条
     public static SimpleDateFormat sdf;
     public static Calendar cal = Calendar.getInstance();
@@ -26,48 +30,62 @@ public class Main extends JFrame {
     public int c_wjjs=0;//创建文件夹数量
     public int c_wjs=0;//复制文件数量
 
-    public static JTextField begin_v = new JTextField("sfsd",36);
-    public static JTextField over_v = new JTextField("werwe",36);
-    public static JComboBox sel_v=new JComboBox();
+    public static JTextField begin_v;
+    public static JTextField over_v;
+    public static JComboBox sel_v;
 
-    public Main(boolean b) {
-        super("文件分类");
-        if(!b) return ;
-        FlowLayout layout = new FlowLayout();
-        //
-        Font font = new Font("宋体",Font.PLAIN,12);
+
+    public static ImageIcon close,close2;
+    public static JLabel jl_c = new JLabel();
+
+    //设置窗体
+    public void setFrame() {
+        int m_l=25;
+        int m_t=15;
+        int h=25;
+        int t_w=80;
+        int t_w2=80*4+50;
+        Font font = new Font("黑体",Font.BOLD,13);
+
+        int x=320,x1=x+m_l+t_w-30;
+        int y=120;
 
         //第一行
-        JLabel begin_k = new JLabel("需求目录：",SwingUtilities.RIGHT);
+        JLabel begin_k = new JLabel("需求目录：");
+        begin_k.setBounds(x,y,t_w,h);
         begin_k.setFont(font);
 
-        JPanel jp_one = new JPanel();
-        jp_one.setLayout(layout);
-        jp_one.setBorder(new EmptyBorder(0,5,0,5));//上、左、下、右。创建具有指定插入一个空的边界。
-        jp_one.add(begin_k);
-        jp_one.add(begin_v);
-        //jp_one.setBorder(BorderFactory.createEmptyBorder(20,20,10,20));
+        begin_v = new JTextField("");
+        begin_v.setBounds(x1,y,t_w2,h);
 
         //第二行
-        JLabel over_k = new JLabel("结果目录：",SwingUtilities.RIGHT);
+        y+=m_t+h;
+
+        JLabel over_k = new JLabel("结果目录：");
+        over_k.setBounds(x,y,t_w,h);
         over_k.setFont(font);
 
-        JPanel jp_two = new JPanel();
-        jp_two.setLayout(layout);
-        jp_two.setBorder(new EmptyBorder(0,5,0,5));
-        jp_two.add(over_k);
-        jp_two.add(over_v);
-
+        over_v = new JTextField("");
+        over_v.setBounds(x1,y,t_w2,h);
 
         //第三行
-        JLabel sel_k = new JLabel("分类类型：",SwingUtilities.RIGHT);
+        y+=m_t+m_l;
+
+        JLabel sel_k = new JLabel("分类类型：");
         sel_k.setFont(font);
+        sel_k.setBounds(x,y,t_w,h);
+
+        sel_v=new JComboBox();
         sel_v.addItem("按天分类");
         sel_v.addItem("按月分类");
         sel_v.addItem("按年分类");
+        sel_v.setBounds(x1,y,t_w,h);
 
         //按钮
+        x1+=m_l*2+t_w*3;
+
         JButton jb = new JButton("分类");
+        jb.setBounds(x1,y,t_w,h);
         jb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -75,58 +93,94 @@ public class Main extends JFrame {
             }
         });
 
-        JLabel kongge = new JLabel(" ");
-        kongge.setBorder(new EmptyBorder(0,242,0,5));
+        y+=m_t+h+30;
+        jscrollPane.setBounds(x,y,t_w2-5+t_w,h*8);
 
-        JPanel jp_three = new JPanel();
-        jp_three.setLayout(layout);
-        jp_two.setBorder(new EmptyBorder(0,5,0,5));
-        jp_three.add(sel_k);
-        jp_three.add(sel_v);
-        jp_three.add(kongge);
-        jp_three.add(jb);
-
-        JPanel jp = new JPanel();
-        jp.setLayout(new GridLayout(3,1));
-        jp.add(jp_one);
-        jp.add(jp_two);
-        jp.add(jp_three);
-
-        JPanel j = new JPanel();
-        j.setLayout(layout);
-        j.setBorder(new EmptyBorder(5,5,5,5));
-        j.add(jp);
-        j.add(jscrollPane);
-
-
-
-        this.setLayout(new GridLayout(1,1));
-
+        ja.setBackground(Color.lightGray);
         ja.setLineWrap(true);//自动换行
         ja.setEnabled(false);//文本框只读
-        this.add(j);
 
-        //背景色，不能直接设置在jFrame,因为jFrame存在内容面板，应该将颜色设置在内容面板上
-        //this.getContentPane()就是获取内容面板
-        //this.getContentPane().setBackground(Color.LIGHT_GRAY);
-        //this.setResizable(false);
-        this.setSize(new Dimension(500, 400));//窗体大小
-        this.setLocationRelativeTo(null);//窗体在屏幕居中
-        this.setUndecorated(true);//窗体标题栏是否显示
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//窗体是否显示关闭按钮
-        this.setResizable(false);//窗体大小是否可变
-        //AWTUtilities.setWindowOpaque(this, false);//窗体完全透明，其中的控件不透明
-        //AWTUtilities.setWindowOpacity(this, Float.parseFloat("0.8"));//全体按比例透明
+        try{
+
+            set_close();
+
+            Image img= ImageIO.read(this.getClass().getResourceAsStream("/public/logo.png"));
+            jf.setIconImage(img);
+
+            ImageIcon background=new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/public/b1.png")));
+            JLabel label = new JLabel(background);
+            label.setBounds(0, 0, background.getIconWidth(),background.getIconHeight());
+            JPanel imagePanel = (JPanel) jf.getContentPane();
+            imagePanel.setOpaque(false);
+            imagePanel.setLayout(null);
+            imagePanel.add(jl_c);
+            imagePanel.add(begin_k);
+            imagePanel.add(begin_v);
+            imagePanel.add(over_k);
+            imagePanel.add(over_v);
+            imagePanel.add(sel_k);
+            imagePanel.add(sel_v);
+            imagePanel.add(jb);
+            imagePanel.add(jscrollPane);
+
+
+            jf.getLayeredPane().setLayout(null);
+            jf.getLayeredPane().add(label, new Integer(Integer.MIN_VALUE));
+            jf.setSize(background.getIconWidth(), background.getIconHeight());
+            jf.setResizable(false);
+        }catch (Exception e){
+
+        }
+        jf.setSize(new Dimension(800, 500));//窗体大小
+        jf.setLocationRelativeTo(null);//窗体在屏幕居中
+        jf.setUndecorated(true);//窗体标题栏是否隐藏
+        jf.setResizable(false);//窗体大小是否可变
+        jf.setVisible(true);//窗体是否显示
+    }
+    //设置关闭按钮
+    public void set_close(){
+        try {
+            close=new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/public/c.png")));
+            close2=new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/public/c2.png")));
+
+            jl_c.setIcon(close);
+            jl_c.setBounds(740,10,36,35);
+            jl_c.addMouseListener(new MouseListener(){
+                public void mouseClicked(MouseEvent e) {
+                    // 处理鼠标点击
+                }
+                public void mouseEntered(MouseEvent e) {
+                    // 处理鼠标移入
+                    jl_c.setIcon(close2);
+                }
+                public void mouseExited(MouseEvent e) {
+                    // 处理鼠标离开
+                    jl_c.setIcon(close);
+                }
+                public void mousePressed(MouseEvent e) {
+                    // 处理鼠标按下
+                }
+                public void mouseReleased(MouseEvent e) {
+                    // 处理鼠标释放
+                    gb_click();
+                }
+            });
+        }catch (Exception e){
+
+        }
+
     }
 
+    //关闭窗体
+    public void gb_click(){
+        System.exit(0);
+    }
     public static void main(String[] args) {
         JFrame.setDefaultLookAndFeelDecorated(true);
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                Window w = new Main(true);
-                w.setVisible(true);
-                Main m = new Main(false);
-
+                Main m = new Main();
+                m.setFrame();
                 boolean re=m.getPublic();
                 if(!re)
                     return;
@@ -135,7 +189,7 @@ public class Main extends JFrame {
 
     }
 
-    //按钮单击时间
+    //按钮单击
     public void jb_click(){
         ja.setText("");
         String beginV=begin_v.getText().toString();
