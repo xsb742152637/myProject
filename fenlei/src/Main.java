@@ -107,7 +107,7 @@ public class Main {
             Image img= ImageIO.read(this.getClass().getResourceAsStream("/public/logo.png"));
             jf.setIconImage(img);
 
-            ImageIcon background=new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/public/b1.png")));
+            ImageIcon background=new ImageIcon(ImageIO.read(this.getClass().getResourceAsStream("/public/b3.png")));
             JLabel label = new JLabel(background);
             label.setBounds(0, 0, background.getIconWidth(),background.getIconHeight());
             JPanel imagePanel = (JPanel) jf.getContentPane();
@@ -135,6 +135,7 @@ public class Main {
         jf.setLocationRelativeTo(null);//窗体在屏幕居中
         jf.setUndecorated(true);//窗体标题栏是否隐藏
         jf.setResizable(false);//窗体大小是否可变
+        AWTUtilities.setWindowOpaque(jf, false);//窗体完全透明，其中的控件不透明
         jf.setVisible(true);//窗体是否显示
     }
     //设置关闭按钮
@@ -361,7 +362,7 @@ public class Main {
     //打印
     public void setText_ja(String text){
         ja.append(text);//在文本框最后追加文本
-        ja.setDisabledTextColor(Color.BLACK);//字体颜色，黑
+        ja.setDisabledTextColor(Color.WHITE);//字体颜色，黑
         ja.setCaretPosition(ja.getText().length());//自动滚动到最底行
     }
 }
